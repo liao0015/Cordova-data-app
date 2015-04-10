@@ -13,6 +13,7 @@ var doubleIndexNum;
 var indexNum;
 var personId;//track person_id
 var occasionId;//track occ_id
+
 //document.addEventListener("DOMContentLoaded", onDeviceReady, false);
 document.addEventListener("deviceready", onDeviceReady, false);
 
@@ -72,7 +73,10 @@ function checkDB(){
 }
 
 function addEventHandlers(){
-    addHammerTapHandler();
+    addHammerTapHandlerOne();
+	addHammerTapHandlerTwo();
+	addHammerTapHandlerThree();
+	addHammerTapHandlerFour();
 	addHammerSwipeHandler();
 	addButtonHandler();
     console.info("Added all event handlers");
@@ -133,10 +137,11 @@ function addNewDataOccasion(ev){
 }
 
 function addNewDataPersonGift(ev){
-	//alert("button 2");
 	ev.preventDefault();
 	var newGift = document.getElementById("new-idea-occasion").value;
-	var purchased=1;
+	var purchased;
+	if(document.getElementById("purchased-occasion").checked){purchased=1;} 
+	else { purchased = 0;}
 	var occArray = occList.querySelectorAll("option");
 	for (var i = 0; i < occArray.length; i++){
 		if(occArray[i].selected == true){
@@ -151,17 +156,18 @@ function addNewDataPersonGift(ev){
 		displayPersonGifts();
 	}
 	else{alert("Please enter a new gift idea");}
-	console.log(occArray);
+	/*console.log(occArray);
 	console.log("occasion ID: "+occasionId);
 	console.log("person ID: "+indexNum);
-	console.log("user input: "+newGift);
+	console.log("user input: "+newGift);*/
 }
 
 function addNewDataOccasionGift(ev){
-	//alert("button 3");
 	ev.preventDefault();
 	var newGift = document.getElementById("new-idea-person").value;
-	var purchased=1;
+	var purchased;
+	if(document.getElementById("purchased-person").checked){purchased=1;} 
+	else { purchased = 0;}
 	var perArray = perList.querySelectorAll("option");
 	for (var i = 0; i < perArray.length; i++){
 		if(perArray[i].selected == true){
@@ -176,10 +182,10 @@ function addNewDataOccasionGift(ev){
 		displayOccasionGifts();
 	}
 	else{alert("Please enter a new gift idea");}
-	console.log(perArray);
+	/*console.log(perArray);
 	console.log("occasion ID: "+indexNum);
 	console.log("person ID: "+personId);
-	console.log("user input: "+newGift);
+	console.log("user input: "+newGift);*/
 }
 
 function displayPeople() {
@@ -192,8 +198,8 @@ function displayPeople() {
 				output[0].innerHTML = "";
 				optOutput.innerHTML = "";
 				for (var i = 0; i < rs.rows.length; i++){
-					output[0].innerHTML += "<li data-ref="+i+">"+rs.rows.item(i).person_name+"</li>";
-					optOutput.innerHTML +="<option value="+i+">"+rs.rows.item(i).person_name +"</option>";
+					output[0].innerHTML += "<li data-ref="+rs.rows.item(i).person_id+">"+rs.rows.item(i).person_name+"</li>";
+					optOutput.innerHTML +="<option value="+rs.rows.item(i).person_id+">"+rs.rows.item(i).person_name +"</option>";
 					console.info("Display items from database stuff");
 				}
             }, 
@@ -213,8 +219,8 @@ function displayOccasions() {
 				output[1].innerHTML = "";
 				optOutput.innerHTML = "";
 				for (var i = 0; i < rs.rows.length; i++){
-					output[1].innerHTML += "<li data-ref="+i+">"+rs.rows.item(i).occ_name+"</li>";
-					optOutput.innerHTML +="<option value="+i+">"+rs.rows.item(i).occ_name +"</option>";
+					output[1].innerHTML += "<li data-ref="+rs.rows.item(i).occ_id+">"+rs.rows.item(i).occ_name+"</li>";
+					optOutput.innerHTML +="<option value="+rs.rows.item(i).occ_id+">"+rs.rows.item(i).occ_name +"</option>";
 					console.info("Display items from database occasions");
 				}
             }, 
@@ -225,7 +231,6 @@ function displayOccasions() {
 }
 
 function displayPersonGifts(){
-	console.log("passing: "+indexNum);
 	db.transaction(function(trans){
         trans.executeSql('SELECT * FROM gifts WHERE person_id = ?', [indexNum], 
             function(tx, rs){
@@ -233,8 +238,13 @@ function displayPersonGifts(){
                 var output = document.querySelectorAll("[data-role=listview]");
 				output[2].innerHTML = "";
 				for (var i = 0; i < rs.rows.length; i++){
-					output[2].innerHTML += "<li data-ref="+i+">"+rs.rows.item(i).gift_idea+"</li>";
+					if(rs.rows.item(i).purchased == 1){
+						output[2].innerHTML += "<li class =\"purchased\" data-ref="+rs.rows.item(i).gift_id+">"+rs.rows.item(i).gift_idea+"(Purchased)</li>";
+					}else{
+						output[2].innerHTML += "<li data-ref="+rs.rows.item(i).gift_id+">"+rs.rows.item(i).gift_idea+"</li>";
+					}
 					console.info("Display items from database gifts");
+					console.log("show&&&&"+rs.rows.item(i).purchased);
 				}
             }, 
             function(tx, err){
@@ -244,7 +254,6 @@ function displayPersonGifts(){
 }
 
 function displayOccasionGifts(){
-	console.log("passing occ: "+ indexNum);
 	db.transaction(function(trans){
         trans.executeSql('SELECT * FROM gifts WHERE occ_id = ?', [indexNum], 
             function(tx, rs){
@@ -252,7 +261,11 @@ function displayOccasionGifts(){
                 var output = document.querySelectorAll("[data-role=listview]");
 				output[3].innerHTML = "";
 				for (var i = 0; i < rs.rows.length; i++){
-					output[3].innerHTML += "<li data-ref="+i+">"+rs.rows.item(i).gift_name+"</li>";
+					if(rs.rows.item(i).purchased == 1){
+						output[3].innerHTML += "<li class =\"purchased\" data-ref="+rs.rows.item(i).gift_id+">"+rs.rows.item(i).gift_idea+"(Purchased)</li>";
+					}else{
+						output[3].innerHTML += "<li data-ref="+rs.rows.item(i).gift_id+">"+rs.rows.item(i).gift_idea+"</li>";
+				}
 					console.info("Display items from database gifts");
 				}
             }, 
@@ -273,6 +286,8 @@ function transSuccess(){
 
 function clearDataPerson(ev){
 	doubleIndexNum = ev.getAttribute("data-ref");
+	console.log(ev);
+	console.log(doubleIndexNum);
 	++doubleIndexNum;
 	--doubleIndexNum;
 	db.transaction(function(tx){
@@ -306,17 +321,54 @@ function clearDataOccasion(ev){
     }, transErr, transSuccess);
 }
 
+function clearDataPersonGift(ev){
+	doubleIndexNum = ev.getAttribute("data-ref");
+	++doubleIndexNum;
+	--doubleIndexNum;
+	db.transaction(function(tx){
+		tx.executeSql('DELETE FROM gifts WHERE gift_id = ?', [doubleIndexNum],
+					function(tx, rs){
+						//console.info("success on getting access to database gift");
+						displayPersonGifts();
+					}, 
+					function(tx, err){
+						console.info( "error: "+err.message);
+					});    
+    }, transErr, transSuccess);
+}
+
+function clearDataOccasionGift(ev){
+	doubleIndexNum = ev.getAttribute("data-ref");
+	++doubleIndexNum;
+	--doubleIndexNum;
+	db.transaction(function(tx){
+		tx.executeSql('DELETE FROM occasions WHERE gift_id = ?', [doubleIndexNum],
+					function(tx, rs){
+						console.info("success on getting access to database people");
+						displayOccasionGifts();
+					}, 
+					function(tx, err){
+						console.info( "error: "+err.message);
+					});    
+    }, transErr, transSuccess);
+}
+
 function showName(ev){
 	indexNum = ev.getAttribute("data-ref");
 	++indexNum;//an error was showing that indexNum is not a number, so I did this...
 	--indexNum;
+	//console.log("show*********: "+indexNum);
 	db.transaction(function(trans){
         trans.executeSql('SELECT * FROM people', [], 
             function(tx, rs){
-                var span = document.getElementById("thePerson");
-				var spam = document.getElementById("nowPerson");
-				span.innerHTML = rs.rows.item(indexNum).person_name;
-				spam.innerHTML = rs.rows.item(indexNum).person_name;
+				for(var i = 0; i <rs.rows.length; i++){
+					if (rs.rows.item(i).person_id == indexNum){
+						var span = document.getElementById("thePerson");
+						var spam = document.getElementById("nowPerson");
+						span.innerHTML = rs.rows.item(i).person_name;
+						spam.innerHTML = rs.rows.item(i).person_name;
+					}
+				}
             }, 
             function(tx, err){
                 console.info( "error: "+err.message);
@@ -329,13 +381,18 @@ function showOccasion(ev){
 	indexNum = ev.getAttribute("data-ref");
 	++indexNum;
 	--indexNum;
+	//console.log("show@@@@@@@: "+indexNum);
 	db.transaction(function(trans){
 		trans.executeSql('SELECT * FROM occasions', [], 
 			function(tx, rs){
-				var span = document.getElementById("theOccasion");
-				var spam = document.getElementById("nowOccasion");
-				span.innerHTML = rs.rows.item(indexNum).occ_name;
-				spam.innerHTML = rs.rows.item(indexNum).occ_name;
+				for(var i = 0; i <rs.rows.length; i++){
+					if (rs.rows.item(i).occ_id == indexNum){
+						var span = document.getElementById("theOccasion");
+						var spam = document.getElementById("nowOccasion");
+						span.innerHTML = rs.rows.item(i).occ_name;
+						spam.innerHTML = rs.rows.item(i).occ_name;
+					}
+				}
 			}, 
 			function(tx, err){
 				console.info( "error: "+err.message);
@@ -344,71 +401,104 @@ function showOccasion(ev){
 }
 
 //all event handlers
-function addHammerTapHandler(ev){
+function addHammerTapHandlerOne(ev){
 	var tar = document.querySelectorAll("[data-role=listview]");
-	var mcOne = new Hammer.Manager(tar[0], {});
-	var mcTwo = new Hammer.Manager(tar[1], {});
-	var mcThree = new Hammer.Manager(tar[2], {});
-	var mcFour = new Hammer.Manager(tar[3], {});
+	var mc = new Hammer (tar[0]);
+
+	var singleTap = new Hammer.Tap({event: 'tap'});
+	var doubleTap = new Hammer.Tap({event:'doubletap', taps:2, threshold:10, posThreshold:25});
+	
+	mc.add([doubleTap, singleTap]);
+	
+	doubleTap.requireFailure(singleTap);
+	
+	mc.on("tap doubletap", function(ev){
+		//console.log(ev);
+		if( ev.type == "tap"){
+			//alert("single tap one");
+			//console.log("tap target person: "+ev.target);
+			document.getElementById("gifts-for-person").style.display = "block";
+			document.getElementById("gifts-for-occasion").style.display = "none";
+			showName(ev.target);
+		}
+		else{
+			//alert("double tap");
+			clearDataPerson(ev.target);
+		}
+	});
+}
+
+function addHammerTapHandlerTwo(ev){
+	var tar = document.querySelectorAll("[data-role=listview]");
+	var mc = new Hammer (tar[1]);
 	
 	var singleTap = new Hammer.Tap({event: 'tap'});
 	var doubleTap = new Hammer.Tap({event:'doubletap', taps:2, threshold:10, posThreshold:25});
 	
-	mcOne.add([doubleTap, singleTap]);
-	mcTwo.add([doubleTap, singleTap]);
-	mcThree.add([doubleTap, singleTap]);
-	mcFour.add([doubleTap, singleTap]);
+	mc.add([doubleTap, singleTap]);
 	
 	doubleTap.requireFailure(singleTap);
 	
-	/*mcOne.on("tap", function(ev){
-		alert("single tap one");
-			console.log("tap target person: "+ev.target);
-			document.getElementById("gifts-for-person").style.display = "block";
-			document.getElementById("gifts-for-occasion").style.display = "none";
-			showName(ev.target);
-	});
-	
-	mcTwo.on("tap", function(ev){
-	alert("single tap two");
-			console.log("tap target occasion: "+ev.target);
-			document.getElementById("gifts-for-person").style.display = "none";
-			document.getElementById("gifts-for-occasion").style.display = "block";
-			showOccasion(ev.target);
-	});*/
-	
-	mcFour.on("tap", function(ev){
-		if(ev.target.parentNode.parentNode.getAttribute("id") == "people-list"){
-			//alert("single tap one");
-			console.log("tap target person: "+ev.target);
-			document.getElementById("gifts-for-person").style.display = "block";
-			document.getElementById("gifts-for-occasion").style.display = "none";
-			showName(ev.target);
-		}
-		else if(ev.target.parentNode.parentNode.getAttribute("id") == "occasion-list"){
-			//alert("single tap two");
-			console.log("tap target occasion: "+ev.target);
+	mc.on("tap doubletap", function(ev){
+		//console.log(ev);
+		if( ev.type == "tap"){
+			//alert("single tap Two");
+			//console.log("tap target person: "+ev.target);
 			document.getElementById("gifts-for-person").style.display = "none";
 			document.getElementById("gifts-for-occasion").style.display = "block";
 			showOccasion(ev.target);
 		}
-	});
-	
-	mcFour.on("doubletap", function(ev){
-		if(ev.target.parentNode.parentNode.getAttribute("id") == "people-list"){
-			//alert("doubled");
-			console.log(ev);
-			console.log(ev.target);
-			clearDataPerson(ev.target);
-		}
-		else if(ev.target.parentNode.parentNode.getAttribute("id") == "occasion-list"){
-			//alert("doubled");
-			console.log(ev);
-			console.log(ev.target);
+		else{
+			//alert("double tap");
 			clearDataOccasion(ev.target);
 		}
 	});
+}
+
+function addHammerTapHandlerThree(ev){
+	var tar = document.querySelectorAll("[data-role=listview]");
+	var mc = new Hammer (tar[2]);
 	
+	var singleTap = new Hammer.Tap({event: 'tap'});
+	var doubleTap = new Hammer.Tap({event:'doubletap', taps:2, threshold:10, posThreshold:25});
+	
+	mc.add([doubleTap, singleTap]);
+	
+	doubleTap.requireFailure(singleTap);
+	
+	mc.on("tap doubletap", function(ev){
+		//console.log(ev);
+		if( ev.type == "tap"){
+			alert("double tap to delete");
+		}
+		else{
+			//alert("double tap");
+			clearDataPersonGift(ev.target);
+		}
+	});
+}
+
+function addHammerTapHandlerFour(ev){
+	var tar = document.querySelectorAll("[data-role=listview]");
+	var mc = new Hammer (tar[3]);
+	
+	var singleTap = new Hammer.Tap({event: 'tap'});
+	var doubleTap = new Hammer.Tap({event:'doubletap', taps:2, threshold:10, posThreshold:25});
+	
+	mc.add([doubleTap, singleTap]);
+	
+	doubleTap.requireFailure(singleTap);
+	
+	mc.on("tap doubletap", function(ev){
+		//console.log(ev);
+		if( ev.type == "tap"){
+			alert("double tap to delete");
+		}
+		else{
+			//alert("double tap");
+			clearDataOccasionGift(ev);
+		}
+	});
 }
 
 function addHammerSwipeHandler(ev){

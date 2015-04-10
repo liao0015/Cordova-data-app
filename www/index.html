@@ -7,6 +7,8 @@
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
     <title>GIFTR</title>
 	<link href="css/style.css" rel="stylesheet"/>
+	
+    
 </head>
 <body>
 	<div class="wrapper">
@@ -48,7 +50,7 @@
 	
 	<!-- modal for adding an entry to person or occasion table -->
 	<div data-role="modal" id="add-person">
-		<h3>New Person</h3>
+		<h3 class="purchased">New Person</h3>
 		<form>
 			<div class="formBox">
 				<input type="text" id="new-per" value="" placeholder="" class=""/>
@@ -84,7 +86,8 @@
 			</div>
 			<div class="formBox">
 				<input type="text" id="new-idea-occasion" value="" placeholder="" class=""/>
-                <input type="checkbox" id= "purchased-occasion" value=""/> 
+                <input type="checkbox" id= "purchased-occasion" placeholder="purchase"/> 
+                purchase check
 			</div>
 			<div class="formBox">
 				<input type="button" class="btnCancel" value="CANCEL" />
@@ -104,7 +107,8 @@
 			</div>
             <div class="formBox">
 				<input type="text" id="new-idea-person" value="" placeholder="" class=""/>
-                <input type="checkbox" id= "purchased-person" value=""/> 
+                <input type="checkbox" id= "purchased-person" placeholder="purchase"/> 
+                purchase check
 			</div>
 			<div class="formBox">
 				<input type="button" class="btnCancel" value="CANCEL" />

@@ -14,8 +14,8 @@ var indexNum;
 var personId;//track person_id
 var occasionId;//track occ_id
 
-//document.addEventListener("DOMContentLoaded", onDeviceReady, false);
-document.addEventListener("deviceready", onDeviceReady, false);
+document.addEventListener("DOMContentLoaded", onDeviceReady, false);
+//document.addEventListener("deviceready", onDeviceReady, false);
 
 function onDeviceReady(){
 	checkDB();
@@ -342,9 +342,9 @@ function clearDataOccasionGift(ev){
 	++doubleIndexNum;
 	--doubleIndexNum;
 	db.transaction(function(tx){
-		tx.executeSql('DELETE FROM occasions WHERE gift_id = ?', [doubleIndexNum],
+		tx.executeSql('DELETE FROM gifts WHERE gift_id = ?', [doubleIndexNum],
 					function(tx, rs){
-						console.info("success on getting access to database people");
+						//console.info("success on getting access to database people");
 						displayOccasionGifts();
 					}, 
 					function(tx, err){
@@ -498,7 +498,7 @@ function addHammerTapHandlerFour(ev){
 		}
 		else{
 			//alert("double tap");
-			clearDataOccasionGift(ev);
+			clearDataOccasionGift(ev.target);
 		}
 	});
 }

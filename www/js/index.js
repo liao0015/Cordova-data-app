@@ -13,8 +13,8 @@ var doubleIndexNum;
 var indexNum;
 var personId;//track person_id
 var occasionId;//track occ_id
-document.addEventListener("DOMContentLoaded", onDeviceReady, false);
-//document.addEventListener("deviceready", onDeviceReady, false);
+//document.addEventListener("DOMContentLoaded", onDeviceReady, false);
+document.addEventListener("deviceready", onDeviceReady, false);
 
 function onDeviceReady(){
 	checkDB();
@@ -132,8 +132,9 @@ function addNewDataOccasion(ev){
 	}
 }
 
-function addNewDataPersonGift(){
-	alert("button 2");
+function addNewDataPersonGift(ev){
+	//alert("button 2");
+	ev.preventDefault();
 	var newGift = document.getElementById("new-idea-occasion").value;
 	var purchased=1;
 	var occArray = occList.querySelectorAll("option");
@@ -156,8 +157,9 @@ function addNewDataPersonGift(){
 	console.log("user input: "+newGift);
 }
 
-function addNewDataOccasionGift(){
-	alert("button 3");
+function addNewDataOccasionGift(ev){
+	//alert("button 3");
+	ev.preventDefault();
 	var newGift = document.getElementById("new-idea-person").value;
 	var purchased=1;
 	var perArray = perList.querySelectorAll("option");
@@ -377,14 +379,14 @@ function addHammerTapHandler(ev){
 	
 	mcFour.on("tap", function(ev){
 		if(ev.target.parentNode.parentNode.getAttribute("id") == "people-list"){
-			alert("single tap one");
+			//alert("single tap one");
 			console.log("tap target person: "+ev.target);
 			document.getElementById("gifts-for-person").style.display = "block";
 			document.getElementById("gifts-for-occasion").style.display = "none";
 			showName(ev.target);
 		}
 		else if(ev.target.parentNode.parentNode.getAttribute("id") == "occasion-list"){
-			alert("single tap two");
+			//alert("single tap two");
 			console.log("tap target occasion: "+ev.target);
 			document.getElementById("gifts-for-person").style.display = "none";
 			document.getElementById("gifts-for-occasion").style.display = "block";
@@ -394,13 +396,13 @@ function addHammerTapHandler(ev){
 	
 	mcFour.on("doubletap", function(ev){
 		if(ev.target.parentNode.parentNode.getAttribute("id") == "people-list"){
-			alert("doubled");
+			//alert("doubled");
 			console.log(ev);
 			console.log(ev.target);
 			clearDataPerson(ev.target);
 		}
 		else if(ev.target.parentNode.parentNode.getAttribute("id") == "occasion-list"){
-			alert("doubled");
+			//alert("doubled");
 			console.log(ev);
 			console.log(ev.target);
 			clearDataOccasion(ev.target);
@@ -417,26 +419,26 @@ function addHammerSwipeHandler(ev){
 	var mcFour = new Hammer(tar[3], {});
 
 	mcOne.on("swipe", function(ev){
-		alert("swipe on");
+		//alert("swipe on");
 		console.log(tar[0])
 		console.log(ev.target)
 		peopleList.style.display = "none";
 		occasionList.style.display = "block";
 	});
 	mcTwo.on("swipe", function(ev){
-		alert("swipe two");
+		//alert("swipe two");
 		console.log(tar[0])
 		console.log(ev.target)
 		peopleList.style.display = "block";
 		occasionList.style.display = "none";
 	});
 	mcThree.on("swipe", function(ev){
-		alert("swipe three");
+		//alert("swipe three");
 		peopleGift.style.display = "none";
 		peopleList.style.display = "block";
 	});
 	mcFour.on("swipe", function(ev){
-		alert("swipe four");
+		//alert("swipe four");
 		occasionGift.style.display = "none";
 		occasionList.style.display = "block";
 	});

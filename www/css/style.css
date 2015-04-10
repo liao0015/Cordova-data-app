@@ -84,7 +84,18 @@ input, select{
   max-width:90%; /* to make them responsive */
 }
 .btnAdd{
-  width:auto;
+  /*width:auto;*/
+  padding-left:1%;
+  padding-right:1%;
+}
+.btnSave{
+ /* width:auto;*/
+  padding-left:1%;
+  padding-right:1%;
+  margin-top:2%;
+}
+.btnCancel{
+ /* width:auto;*/
   padding-left:1%;
   padding-right:1%;
 }

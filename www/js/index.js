@@ -420,6 +420,7 @@ function addHammerTapHandlerOne(ev){
 			document.getElementById("gifts-for-person").style.display = "block";
 			document.getElementById("gifts-for-occasion").style.display = "none";
 			showName(ev.target);
+			displayPersonGifts();
 		}
 		else{
 			//alert("double tap");
@@ -447,6 +448,7 @@ function addHammerTapHandlerTwo(ev){
 			document.getElementById("gifts-for-person").style.display = "none";
 			document.getElementById("gifts-for-occasion").style.display = "block";
 			showOccasion(ev.target);
+			displayOccasionGifts();
 		}
 		else{
 			//alert("double tap");
